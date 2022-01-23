@@ -58,7 +58,7 @@ class Hand:
     def show_hand(self):
         print()
         print(f"{self.name} has the following")
-        for card in player_hand.hand:
+        for card in self.hand:
             print(card.face + " of " + card.suit)
 
 suits = ['spades', 'clubs', 'hearts', 'diamonds']
@@ -70,8 +70,17 @@ random.shuffle(deck)
 dealer_hand = Hand("Dealer")
 player_hand = Hand("Player")
 
+def dealer_stays():
+    print()
+    print(f"Dealer has {dealer_hand.cnt}, Dealer stays")
+
 dealer_hand.show_hand()
 player_hand.show_hand()
+
+if player_hand.cnt == 21:
+    print()
+    print("Blackjack!, you win!")
+    sys.exit()
 
 #player hit or stay loop
 while player_hand.cnt < 21:
@@ -79,18 +88,16 @@ while player_hand.cnt < 21:
     if choice == "hit":
         player_hand.draw()
         player_hand.show_hand()
+        print()
+        print(f"Player has {player_hand.cnt}")
     elif choice == "stay":
+        player_hand.show_hand()
+        print()
+        print(f"Player has {player_hand.cnt}")
         break
     else:
         print()
         print("That's not a valid input")
-
-player_hand.show_hand()
-
-if player_hand.cnt == 21:
-    print()
-    print("Blackjack!, you win!")
-    sys.exit()
 
 if player_hand.cnt > 21:
     print()
@@ -99,29 +106,35 @@ if player_hand.cnt > 21:
 
 #dealer
 while dealer_hand.cnt < 17:
+    print()
+    print(f"Dealer has {dealer_hand.cnt}, Dealer hits")
+    time.sleep(3)
     dealer_hand.draw()
     dealer_hand.show_hand()
     time.sleep(3)
 
-dealer_hand.show_hand()
-
 #results
 if dealer_hand.cnt > 21:
+    print()
+    print(f"Dealer has {dealer_hand.cnt}")
     print()
     print("The Dealer busts. You win!")
     sys.exit()
 
 if dealer_hand.cnt > player_hand.cnt:
+    dealer_stays()
     print()
     print("The dealer wins this hand")
     sys.exit()
 
 elif dealer_hand.cnt < player_hand.cnt:
+    dealer_stays()
     print()
     print("You win this hand!")
     sys.exit()
 
 else:
+    dealer_stays()
     print()
     print("It's a push")
     sys.exit()
